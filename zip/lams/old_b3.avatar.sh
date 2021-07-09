@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# solves 4 under 15s
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+ulimit -t $2
+
+$DIR/zipperposition ${1:+"$1"} \
+  -i tptp\
+  -o tptp\
+  --timeout "$2" \
+  --mode=ho-pragmatic \
+  --max-inferences=3 --ho-max-app-projections=1 --ho-max-elims=0 --ho-max-rigid-imitations=3 --ho-max-identifications=0 \
+  --ho-unif-max-depth=3 \
+  --boolean-reasoning=no-cases \
+  --ext-rules=off \
+  --ho-prim-enum=none \
+  --tptp-def-as-rewrite --rewrite-before-cnf=true \
+  --ho-unif-level=pragmatic-framework \
+  -q "4|prefer-sos|orient-lmax(2,1,2,1,1)" \
+  -q "4|defer-sos|conjecture-relative-var(1,s,f)" \
+  -q "3|const|default" \
+  -q "1|prefer-processed|fifo" \
+  --ho-elim-leibniz=1 \
+  --ho-fixpoint-decider=true --ho-pattern-decider=true --ho-solid-decider=true \
+  --select=e-selection15 --prec-gen-fun=arity --ord=lambda_rpo \
+  --lazy-cnf=true --lazy-cnf-kind=inf --lazy-cnf-renaming-threshold=6 \
+  --sine=60 --sine-tolerance=2 --sine-depth-max=3 --sine-depth-min=1 \
+  --avatar=eager --split-only-ground=true \
+  --scan-clause-ac=true
